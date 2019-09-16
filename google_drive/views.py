@@ -1,25 +1,18 @@
-from io import BytesIO
-
-import joblib as joblib
+import pickle
+import os.path
 from django.core.files.base import ContentFile
 from django.shortcuts import render
 from django.views import View
 from django.core.files import File
-
 from .models import User, GoogleDriveCredentials
-
 from social_drive import constants
-
-import pickle
-import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
-
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class GoogleDeiveConnect(LoginRequiredMixin, View):
+class GoogleDriveConnect(LoginRequiredMixin, View):
     login_url = '/login/'
     template_name = 'drive_files_list.html'
 
@@ -63,3 +56,11 @@ class GoogleDeiveConnect(LoginRequiredMixin, View):
         items = results.get('files', [])
 
         return render(request, self.template_name, {'items': items})
+
+
+class HomeView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    template_name = 'home.html'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)

@@ -1,1 +1,2 @@
 SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
+DOPBOX_CONNECT = 'https://www.dropbox.com/oauth2/authorize?client_id=lscra6gncje824j&response_type=token&redirect_uri=http://127.0.0.1:8000/connect/'
