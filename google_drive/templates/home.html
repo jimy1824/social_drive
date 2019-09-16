@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block pagecontent %}
+    <h3>All Drives</h3>
+    <p>Connected Drives</p>
+    <table>
+        <tr>
+            <th>No.</th>
+            <th>Drive</th>
+            <th>Status</th>
+            <th>Connect/Disconnect</th>
+        </tr>
+            <tr>
+                <td>1</td>
+                <td>Google Drive</td>
+                <td>Not Defined</td>
+                <td><a href="{% url 'connect_google_drive' %}" a>Connect to Google</a></td>
+            </tr>
+        <tr>
+                <td>2</td>
+                <td>Dropbox</td>
+                <td>Not Defined</td>
+                <td><a href="{% url 'dropbox_connect' %}" a>Connect to Dropbox</a></td>
+            </tr>
+    </table>
+{% endblock %}
