@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path(r'', include('google_drive.urls')),
     path(r'', include('dropbox.urls')),
+    path(r'', include('onedrive.urls')),
     url(r'^login/$', auth_views.LoginView.as_view(), {'redirect_authenticated_user': True},
         name='login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(), {'next_page': 'connect_google_drive'},
