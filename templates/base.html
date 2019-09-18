@@ -38,6 +38,7 @@
                 <ul class="dropdown-menu">
                     <li><a href="{% url 'connect_google_drive' %}">Google</a></li>
                     <li><a href="{% url 'dropbox_connect' %}">Dropbox</a></li>
+                    <li><a href="{% url 'onedrive_honme' %}">OneDrive</a></li>
                 </ul>
             </li>
         </ul>
@@ -52,7 +53,7 @@
 </nav>
 
 <div class="container">
-{% block pagecontent %}
+    {% block pagecontent %}
     {% endblock %}
 </div>
 

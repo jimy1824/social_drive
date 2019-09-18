@@ -28,6 +28,8 @@ class GoogleDriveConnect(LoginRequiredMixin, View):
             else:
                 google_drive_account_instance = GoogleDriveCredentials.objects.filter(
                     drive_email='edtechworxcommunity@gmail.com').first()
+                print(google_drive_account_instance)
+                print(google_drive_account_instance.credential_file.path)
                 flow = InstalledAppFlow.from_client_secrets_file(
                     google_drive_account_instance.credential_file.path, constants.SCOPES)
                 creds = flow.run_local_server(port=0)
