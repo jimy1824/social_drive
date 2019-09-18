@@ -19,6 +19,7 @@ def gettoken(request):
   # redirect_uri = request.build_absolute_uri(reverse('https://www.google.com'))
   redirect_uri = 'https://79fe3397.ngrok.io/gettoken/'
   token = get_token_from_code(auth_code, redirect_uri)
+  print(token)
   access_token = token['access_token']
   user = get_me(access_token)
 
