@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block pagecontent %}
+    <h3>Dropbox</h3>
+    <p>get respective user dropbox data.</p>
+    <p>Name :{{ account_info.name.display_name }}</p>
+    <p>Email :{{ account_info.email }}</p>
+    <p>total files ={{ total_files.file_request_count }}.</p>
+    <table>
+        <tr>
+            <th>No.</th>
+            <th>ID</th>
+            <th>File</th>
+        </tr>
+        {% for file in list_of_files %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ file.id }}</td>
+                <td>{{ file.name }}</td>
+
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
