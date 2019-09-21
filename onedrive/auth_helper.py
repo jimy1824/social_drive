@@ -1,7 +1,5 @@
 from urllib.parse import quote, urlencode
 import requests
-import base64
-import json
 import time
 
 # Client ID and secret
