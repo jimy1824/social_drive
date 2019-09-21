@@ -42,7 +42,7 @@ def get_me(access_token):
 
     # Use OData query parameters to control the results
     #  - Only return the displayName and mail fields
-    query_parameters = {'$select': 'displayName,mail'}
+    query_parameters = {'$select': 'displayName,files'}
 
     r = make_api_call('GET', get_me_url, access_token, "", parameters=query_parameters)
 
