@@ -10,7 +10,8 @@ class User(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     subscription = models.BooleanField(default=False)
-    google_credential_file=models.FileField(upload_to='GoogleDriveCredentials/', blank=True,null=True)
+    google_credential_file = models.FileField(upload_to='GoogleDriveCredentials/', blank=True, null=True)
+    dropbox_access_token = models.TextField(blank=True, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -20,12 +21,12 @@ class User(AbstractUser):
 
 
 class GoogleDriveCredentials(models.Model):
-    drive_email=models.EmailField()
+    drive_email = models.EmailField()
     title = models.CharField(max_length=250)
-    description = models.TextField(blank=True,null=True)
+    description = models.TextField(blank=True, null=True)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
-    credential_file=models.FileField(upload_to='Credentials/', )
+    credential_file = models.FileField(upload_to='Credentials/', )
 
     def __str__(self):
-        return 'Id:{0} Title:{1} Email:{1} '.format(self.id, self.title,self.drive_email)
+        return 'Id:{0} Title:{1} Email:{1} '.format(self.id, self.title, self.drive_email)
