@@ -1,3 +1,4 @@
+from onedrive.ondrive_service import get_drive
 from social_drive.celery import app
 from google_drive.models import User
 from .models import DrivesData
@@ -77,6 +78,19 @@ def Box_syscronization(user):
             instance.save()
 
 
+def OneDrive_syscronization(user, onedrive_access_code):
+    raw_data = get_drive(onedrive_access_code)
+    for file in raw_data.get('value'):
+        file_type = DrivesData.FILE
+        if file.get('folder'):
+            file_type = DrivesData.DIRECTORY
+        if file.get('file'):
+            file_type = DrivesData.FILE
+        instance = DrivesData(user=user, drive_type=DrivesData.ONEDRIVE, file_type=file_type, file_id=file.get('id'),
+                              file_name=file.get('name'))
+        instance.save()
+
+
 @app.task
 def data_syscronization(drive_type, user_email):
     user = User.objects.filter(email=user_email).first()
@@ -89,3 +103,6 @@ def data_syscronization(drive_type, user_email):
     if user.box_access_code:
         if drive_type == DrivesData.BOX:
             Box_syscronization(user)
+    if user.onedrive_access_code:
+        if drive_type == DrivesData.ONEDRIVE:
+            OneDrive_syscronization(user, user.onedrive_access_code)

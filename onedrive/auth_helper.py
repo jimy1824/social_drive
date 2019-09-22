@@ -38,8 +38,6 @@ def get_signin_url(redirect_uri):
               }
 
     signin_url = authorize_url.format(urlencode(params))
-    # print(signin_url)
-
     return signin_url
 
 
