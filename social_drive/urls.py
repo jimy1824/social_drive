@@ -26,6 +26,7 @@ urlpatterns = [
     path(r'', include('drop_box.urls')),
     path(r'', include('onedrive.urls')),
     path(r'', include('box.urls')),
+    path(r'', include('evernote_drive.urls')),
     url(r'^login/$', auth_views.LoginView.as_view(), {'redirect_authenticated_user': True},
         name='login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(), {'next_page': 'connect_google_drive'},

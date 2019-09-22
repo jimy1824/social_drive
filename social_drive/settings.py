@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'google_drive.apps.GoogleDriveConfig',
     'dropbox',
     'onedrive',
-    'box'
+    'box',
+    'evernote'
 ]
 
 MIDDLEWARE = [
