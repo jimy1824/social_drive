@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'drop_box',
     'onedrive',
     'drives_data',
-    'rest_framework'
+    'rest_framework',
     'box'
 ]
 
