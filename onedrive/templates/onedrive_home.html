@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% block pagecontent %}
+    <style>
+        #snackbar {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            font-size: 17px;
+        }
+
+        #snackbar.show {
+            visibility: visible;
+            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @-webkit-keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
+    </style>
+
+    <h3>One Drive</h3>
+    <button id="sync" class="button" style="float: right;background-color: black;color: white">sync</button>
+    <p>get respective user onedrive data.</p>
+    <p>total files ={{ list_of_files.count }}.</p>
+    <table>
+        <tr>
+            <th>No.</th>
+            <th>ID</th>
+            <th>File</th>
+            <th>Type</th>
+        </tr>
+        {% for data in list_of_files %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ data.file_id }}</td>
+                <td>{{ data.file_name }}</td>
+                <td>{{ data.file_type }}</td>
+
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div id="snackbar">Now Syncronization..</div>
+    <script>
+        $('#sync').on('click', function (e) {
+            $.ajax({
+                type: 'GET',
+                url: "{% url 'syncronization'  drive_type=drive_type %}",
+                dataType: 'json',
+                success: function (data) {
+                    console.log('success', data);
+
+                    var x = document.getElementById("snackbar");
+                    x.className = "show";
+                    setTimeout(function () {
+                        x.className = x.className.replace("show", "");
+                    }, 3000);
+
+                },
+                error: function (exception) {
+                    alert('Exeption:' + exception);
+
+
+                }
+            });
+            e.preventDefault();
+        });
+    </script>
+{% endblock %}
