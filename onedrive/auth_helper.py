@@ -4,7 +4,7 @@ import time
 
 # Client ID and secret
 client_id = 'ce9a9b0e-6de2-4ba1-bcfa-1352be652529'
-client_secret = 'ujIp-k_-R0Xm[J0zCpS77fx*OPVph]AY'
+client_secret = '3L[g4r+BW+1L-3yGa5xct6w+*Wt1OX-f'
 
 # Constant strings for OAuth2 flow
 # The OAuth authority

@@ -13,13 +13,19 @@
             <td>1</td>
             <td>Google Drive</td>
             <td>Not Defined</td>
-            <td><a href="{% url 'googledrive_home' %}" a>Connect to Google</a></td>
+            <td><a href="{% url 'googledrive_home' %}">Connect to Google</a></td>
         </tr>
         <tr>
             <td>2</td>
             <td>Dropbox</td>
             <td>Not Defined</td>
-            <td><a href="{% url 'dropbox_home' %}" a>Connect to Dropbox</a></td>
+            <td><a href="{% url 'dropbox_home' %}">Connect to Dropbox</a></td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Onedrive</td>
+            <td>Not Defined</td>
+            <td><a href="{{ signin_url }}">Connect to Onedrive</a></td>
         </tr>
         <tr>
             <td>3</td>
@@ -28,5 +34,4 @@
             <td><a href="{% url 'box_home' %}" a>Connect to Box</a></td>
         </tr>
     </table>
-    <p>{{ signin_url }}</p>
 {% endblock %}
