@@ -22,6 +22,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path(r'', include('drives_data.urls')),
     path(r'', include('google_drive.urls')),
     path(r'', include('drop_box.urls')),
     path(r'', include('onedrive.urls')),

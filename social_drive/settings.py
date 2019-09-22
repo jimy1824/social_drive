@@ -36,8 +36,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'google_drive.apps.GoogleDriveConfig',
-    'dropbox',
+    'drop_box',
     'onedrive',
+    'drives_data',
+    'rest_framework'
     'box'
 ]
 
