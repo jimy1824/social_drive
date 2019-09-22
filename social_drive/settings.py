@@ -24,7 +24,7 @@ SECRET_KEY = 'uvei5($6-pluevj#wpft0%el9hpnpolrpv9)0w4@s@%4x5mxx^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '79fe3397.ngrok.io']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '474560ff.ngrok.io']
 
 # Application definition
 
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'onedrive',
     'drives_data',
     'rest_framework'
+    'box'
 ]
 
 MIDDLEWARE = [

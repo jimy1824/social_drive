@@ -1,16 +1,17 @@
 from urllib.parse import quote, urlencode
 import requests
-import base64
-import json
 import time
 
 # Client ID and secret
 client_id = 'ce9a9b0e-6de2-4ba1-bcfa-1352be652529'
-client_secret = 'q2BjQYrZo2Gw72OpMJ[lC-]]_tVK[phN'
+client_secret = 'ujIp-k_-R0Xm[J0zCpS77fx*OPVph]AY'
 
 # Constant strings for OAuth2 flow
 # The OAuth authority
 authority = 'https://login.microsoftonline.com'
+
+# GET https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=ce9a9b0e-6de2-4ba1-bcfa-1352be652529&scope=openid offline_access User.Read files.read files.read.all files.readwrite files.readwrite.all&response_type=token&redirect_uri=https://www.google.com
+
 
 # The authorize URL that initiates the OAuth2 client credential flow for admin consent
 authorize_url = '{0}{1}'.format(authority, '/common/oauth2/v2.0/authorize?{0}')
@@ -22,9 +23,10 @@ token_url = '{0}{1}'.format(authority, '/common/oauth2/v2.0/token')
 scopes = ['openid',
           'offline_access',
           'User.Read',
-          'Mail.Read',
-          'Calendars.Read',
-          'Contacts.Read']
+          'files.read',
+          'files.read.all',
+          'files.readwrite',
+          'files.readwrite.all']
 
 
 def get_signin_url(redirect_uri):
