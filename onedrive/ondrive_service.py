@@ -50,3 +50,18 @@ def get_me(access_token):
         return r.json()
     else:
         return "{0}: {1}".format(r.status_code, r.text)
+
+
+def get_drive(access_token):
+    get_me_url = graph_endpoint.format('/me/drive/root/children')
+
+    # Use OData query parameters to control the results
+    #  - Only return the displayName and mail fields
+    query_parameters = {}
+
+    r = make_api_call('GET', get_me_url, access_token, "", parameters=query_parameters)
+
+    if (r.status_code == requests.codes.ok):
+        return r.json()
+    else:
+        return "{0}: {1}".format(r.status_code, r.text)
