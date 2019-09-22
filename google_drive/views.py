@@ -1,7 +1,7 @@
 import pickle
 import os.path
 from django.core.files.base import ContentFile
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.core.files import File
 from .models import User, GoogleDriveCredentials
@@ -10,11 +10,24 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from django.contrib.auth.mixins import LoginRequiredMixin
+from drives_data.models import DrivesData
+
+
+class GoogleDriveHome(LoginRequiredMixin, View):
+    login_url = '/login/'
+    template_name = 'googledrive_home.html'
+
+    def get(self, request, *args, **kwargs):
+        user = User.objects.filter(id=request.user.id).first()
+        if user.google_credential_file:
+            list_of_files = DrivesData.objects.filter(drive_type=DrivesData.GOOGLEDRIVE, user=request.user)
+            return render(request, self.template_name,
+                          {'list_of_files': list_of_files, 'drive_type': DrivesData.GOOGLEDRIVE})
+        return redirect('connect_google_drive')
 
 
 class GoogleDriveConnect(LoginRequiredMixin, View):
     login_url = '/login/'
-    template_name = 'drive_files_list.html'
 
     def get(self, request, *args, **kwargs):
         creds = None
@@ -36,31 +49,10 @@ class GoogleDriveConnect(LoginRequiredMixin, View):
                     pickle.dump(creds, token)
                 fh = open(file_name, 'rb')
                 if fh:
-                    # Get the content of the file
                     file_content = ContentFile(fh.read())
-                    print(file_content)
-                    # Set the media attribute of the article, but under an other path/filename
                     user.google_credential_file.save(file_name, file_content)
-                    # Save the article
                     user.save()
-                # Close the file and delete it
                 fh.close()
 
                 os.remove(file_name)
-
-        service = build('drive', 'v3', credentials=creds)
-
-        # Call the Drive v3 API
-        results = service.files().list(
-            pageSize=10, fields="nextPageToken, files(id, name)").execute()
-        items = results.get('files', [])
-
-        return render(request, self.template_name, {'items': items})
-
-
-class HomeView(LoginRequiredMixin, View):
-    login_url = '/login/'
-    template_name = 'home.html'
-
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+        return redirect('googledrive_home')

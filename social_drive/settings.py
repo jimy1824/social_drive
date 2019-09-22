@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'google_drive.apps.GoogleDriveConfig',
     'drop_box',
-    'onedrive'
+    'onedrive',
+    'drives_data',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
