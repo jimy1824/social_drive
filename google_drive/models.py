@@ -12,6 +12,7 @@ class User(AbstractUser):
     subscription = models.BooleanField(default=False)
     google_credential_file = models.FileField(upload_to='GoogleDriveCredentials/', blank=True, null=True)
     dropbox_access_token = models.TextField(blank=True, null=True)
+    box_access_code = models.TextField(blank=True, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']

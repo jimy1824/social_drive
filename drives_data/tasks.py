@@ -7,6 +7,8 @@ import pickle
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 
+import requests
+
 
 def Dropbox_syscronization(user, access_token):
     data_list = []
@@ -50,6 +52,31 @@ def GoogleDrive_syscronization(user):
         instance.save()
 
 
+def Box_syscronization(user):
+    if user.box_access_code:
+        r = requests.post("https://api.box.com/oauth2/token",
+                          data={'grant_type': 'refresh_token', 'refresh_token': user.box_access_code,
+                                'client_id': 'vtqh4e0myek3bpx7t2mdwca19xz6rgb5',
+                                'client_secret': 'knlLggbUFmO6VMRqKg4nAonHW5ZE1Zaa'})
+        r_object = r.json()
+        refresh_token = r_object['refresh_token']
+        if refresh_token:
+            user.box_access_code = refresh_token
+            user.save()
+        access_token = r_object['access_token']
+        data = {"Authorization": "Bearer " + access_token}
+        files = requests.get('https://api.box.com/2.0/folders/0', headers=data)
+        files_entries = files.json().get('item_collection').get('entries')
+        for file in files_entries:
+            if file.get('type') == 'folder':
+                file_type = DrivesData.DIRECTORY
+            else:
+                file_type = DrivesData.FILE
+            instance = DrivesData(user=user, drive_type=DrivesData.BOX, file_type=file_type,
+                                  file_id=file.get('id'), file_name=file.get('name'))
+            instance.save()
+
+
 @app.task
 def data_syscronization(drive_type, user_email):
     user = User.objects.filter(email=user_email).first()
@@ -59,3 +86,6 @@ def data_syscronization(drive_type, user_email):
     if user.google_credential_file:
         if drive_type == DrivesData.GOOGLEDRIVE:
             GoogleDrive_syscronization(user)
+    if user.box_access_code:
+        if drive_type == DrivesData.BOX:
+            Box_syscronization(user)
