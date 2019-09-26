@@ -17,11 +17,6 @@ class DropBoxHome(LoginRequiredMixin, View):
         user = User.objects.filter(id=request.user.id).first()
         if user.dropbox_access_token:
             list_of_files = DrivesData.objects.filter(drive_type=DrivesData.DROPBOX, user=request.user)
-            # dbx = dropbox.Dropbox(user.dropbox_access_token)
-            # account_info=dbx.users_get_current_account()
-            # total_files=dbx.file_requests_count()
-            # list_of_files=dbx.files_list_folder('').entries
-
             return render(request, self.template_name,
                           {'list_of_files': list_of_files, 'drive_type': DrivesData.DROPBOX})
         return redirect(constants.DOPBOX_CONNECT)
