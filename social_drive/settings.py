@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname('social_drive'))
@@ -128,3 +129,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'login'
+
+BOX_CLIENT_ID = config('BOX_CLIENT_ID')
+BOX_CLIENT_SECRET_ID = config('BOX_CLIENT_SECRET_ID')
+DROPBOX_CLIENT_ID = config('DROPBOX_CLIENT_ID')
+BOX_STATE_ID = config('BOX_STATE_ID')
+ONEDRIVE_CLIENT_ID = config('ONEDRIVE_CLIENT_ID')
+ONEDRIVE_SECRET_ID = config('ONEDRIVE_SECRET_ID')

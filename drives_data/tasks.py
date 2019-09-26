@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from onedrive.ondrive_service import get_drive
 from social_drive.celery import app
 from google_drive.models import User
@@ -57,8 +59,8 @@ def Box_syscronization(user):
     if user.box_access_code:
         r = requests.post("https://api.box.com/oauth2/token",
                           data={'grant_type': 'refresh_token', 'refresh_token': user.box_access_code,
-                                'client_id': 'vtqh4e0myek3bpx7t2mdwca19xz6rgb5',
-                                'client_secret': 'knlLggbUFmO6VMRqKg4nAonHW5ZE1Zaa'})
+                                'client_id':settings.BOX_CLIENT_ID,
+                                'client_secret': settings.BOX_CLIENT_SECRET_ID})
         r_object = r.json()
         refresh_token = r_object['refresh_token']
         if refresh_token:

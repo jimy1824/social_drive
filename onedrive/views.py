@@ -7,6 +7,8 @@ from drives_data.models import DrivesData
 from google_drive.models import User
 from onedrive.auth_helper import get_token_from_code, get_signin_url
 
+from social_drive import constants
+
 
 class OneDriveHome(LoginRequiredMixin, View):
     login_url = '/login/'
@@ -19,7 +21,7 @@ class OneDriveHome(LoginRequiredMixin, View):
             return render(request, self.template_name,
                           {'list_of_files': list_of_files, 'drive_type': DrivesData.ONEDRIVE})
 
-        redirect_uri = 'http://localhost:8000/gettoken/'
+        redirect_uri = constants.SERVER_ADDRESS + '/gettoken/'
         # redirect_uri = request.build_absolute_uri(reverse('gettoken'))
         sign_in_url = get_signin_url(redirect_uri)
         return redirect(sign_in_url)
