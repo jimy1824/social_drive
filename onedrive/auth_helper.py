@@ -3,8 +3,10 @@ import requests
 import time
 
 # Client ID and secret
-client_id = 'ce9a9b0e-6de2-4ba1-bcfa-1352be652529'
-client_secret = '3L[g4r+BW+1L-3yGa5xct6w+*Wt1OX-f'
+from django.conf import settings
+
+client_id = settings.ONEDRIVE_CLIENT_ID
+client_secret = settings.ONEDRIVE_SECRET_ID
 
 # client_id = '7d5dabd8-7a75-4425-8bae-b98be62f2e0b'
 # client_secret = 'Ptn9Q=cI6xTlBPH=0SQer]ORIblzuH=1'

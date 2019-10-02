@@ -39,10 +39,8 @@ class GoogleDriveConnect(LoginRequiredMixin, View):
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
-                google_drive_account_instance = GoogleDriveCredentials.objects.filter(
-                    drive_email='edtechworxcommunity@gmail.com').first()
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    google_drive_account_instance.credential_file.path, constants.SCOPES)
+                flow = InstalledAppFlow.from_client_secrets_file('social_drive/credentials/credentials.json',
+                                                                 constants.SCOPES)
                 creds = flow.run_local_server(port=0)
                 file_name = str(user.id) + '.pickle'
                 with open(file_name, 'wb') as token:

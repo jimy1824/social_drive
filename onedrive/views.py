@@ -13,6 +13,8 @@ from google_drive.models import User
 from onedrive.auth_helper import get_token_from_code, get_signin_url, get_code_from_code
 from onedrive.ondrive_service import get_sharepoint, get_drive
 
+from social_drive import constants
+
 
 class OneDriveHome(APIView):
     login_url = '/login/'
@@ -29,7 +31,6 @@ class OneDriveHome(APIView):
         #                   {'list_of_files': list_of_files, 'drive_type': DrivesData.ONEDRIVE})
 
         redirect_uri = 'https://2ea8349c.ngrok.io/gettoken/'
-        # redirect_uri = 'http://localhost:8080/onedrive/'
         # redirect_uri = request.build_absolute_uri(reverse('gettoken'))
         sign_in_url = get_signin_url(redirect_uri)
         return Response(sign_in_url)

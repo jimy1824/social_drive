@@ -1,4 +1,5 @@
 import requests
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.shortcuts import render, redirect
 from django.views import View
@@ -39,10 +40,10 @@ class BoxReturnUrl(APIView):
         box_access_code = kwargs.get('code')
         print(box_access_code)
         if box_access_code:
-            r = requests.post("https://api.box.com/oauth2/token",
+            r = requests.post(constants.BOX_AUTH_URL,
                               data={'grant_type': 'authorization_code', 'code': box_access_code,
-                                    'client_id': 'vtqh4e0myek3bpx7t2mdwca19xz6rgb5',
-                                    'client_secret': 'knlLggbUFmO6VMRqKg4nAonHW5ZE1Zaa'})
+                                    'client_id': settings.BOX_CLIENT_ID,
+                                    'client_secret': settings.BOX_CLIENT_SECRET_ID})
             r_object = r.json()
             refresh_token = r_object['refresh_token']
             if refresh_token:

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 import datetime
 import os
+from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
@@ -160,8 +161,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'login'
 
-
 JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
 }
+BOX_CLIENT_ID = config('BOX_CLIENT_ID')
+BOX_CLIENT_SECRET_ID = config('BOX_CLIENT_SECRET_ID')
+DROPBOX_CLIENT_ID = config('DROPBOX_CLIENT_ID')
+BOX_STATE_ID = config('BOX_STATE_ID')
+ONEDRIVE_CLIENT_ID = config('ONEDRIVE_CLIENT_ID')
+ONEDRIVE_SECRET_ID = config('ONEDRIVE_SECRET_ID')
