@@ -19,9 +19,11 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
+from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^api-token-auth/', obtain_jwt_token),
     path(r'', include('drives_data.urls')),
     path(r'', include('google_drive.urls')),
     path(r'', include('drop_box.urls')),

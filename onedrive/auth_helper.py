@@ -6,6 +6,9 @@ import time
 client_id = 'ce9a9b0e-6de2-4ba1-bcfa-1352be652529'
 client_secret = '3L[g4r+BW+1L-3yGa5xct6w+*Wt1OX-f'
 
+# client_id = '7d5dabd8-7a75-4425-8bae-b98be62f2e0b'
+# client_secret = 'Ptn9Q=cI6xTlBPH=0SQer]ORIblzuH=1'
+
 # Constant strings for OAuth2 flow
 # The OAuth authority
 authority = 'https://login.microsoftonline.com'
@@ -26,7 +29,17 @@ scopes = ['openid',
           'files.read',
           'files.read.all',
           'files.readwrite',
-          'files.readwrite.all']
+          'files.readwrite.all',
+          'Sites.Read.All',
+          'Sites.ReadWrite.All',
+          'Sites.Manage.All',
+          'Sites.FullControl.All',
+          # 'Sites.Search.All',
+          # 'TermStore.Read.All',
+          # 'TermStore.ReadWrite.All',
+          # 'User.Read.All',
+          # 'User.ReadWrite.All'
+          ]
 
 
 def get_signin_url(redirect_uri):
@@ -53,6 +66,24 @@ def get_token_from_code(auth_code, redirect_uri):
 
     r = requests.post(token_url, data=post_data)
 
+    try:
+        return r.json()
+    except:
+        return 'Error retrieving token: {0} - {1}'.format(r.status_code, r.text)
+
+
+def get_code_from_code(auth_code, redirect_uri):
+    # Build the post form for the token request
+    post_data = {'grant_type': 'authorization_code',
+                 'code': auth_code,
+                 'redirect_uri': redirect_uri,
+                 'scope': ' '.join(str(i) for i in scopes),
+                 'client_id': client_id,
+                 'client_secret': client_secret
+                 }
+
+    r = requests.post(token_url, data=post_data)
+    print(r.json())
     try:
         return r.json()
     except:
