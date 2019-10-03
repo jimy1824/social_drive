@@ -1,4 +1,5 @@
 from django.core.files.base import ContentFile
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -7,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from drives_data.serializers import UserSerializer
+from drives_data.tasks import data_syscronization
 from google_drive.models import User
 from social_drive import constants
 import dropbox
@@ -41,17 +43,28 @@ class DropBoxReturnURLView(View):
         return render(request, self.template_name)
 
 
+class SaveDropboxDataView(APIView):
+    permission_class = (IsAuthenticated,)
+    serializer_class = UserSerializer
+
+    def get(self, request):
+        if request.user.dropbox_access_token:
+            data_syscronization(DrivesData.DROPBOX, request.user.email)
+        return JsonResponse({'msg': 'You are connected'})
+
+
+
 class UpdateDropBoxCredentialsView(APIView):
     permission_class = (IsAuthenticated,)
     serializer_class = UserSerializer
 
     def get(self, request):
         token = request.GET.get('access_token')
-        print(token)
         # token = request.get_full_path()
         # url, token = token.split('/update_drpbox_credentials/?')
         if token:
             user = User.objects.filter(id=request.user.id).first()
             user.dropbox_access_token = token
             user.save()
-        return redirect('http://localhost:8080/dropbox/')
+            data_syscronization(DrivesData.DROPBOX, user.email)
+        return JsonResponse({'msg': 'You are connected'})

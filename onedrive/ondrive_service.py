@@ -9,8 +9,9 @@ graph_endpoint = 'https://graph.microsoft.com/v1.0{0}'
 def make_api_call(method, url, token, payload=None, parameters=None):
     # Send these headers with all API calls
     headers = {'User-Agent': 'django_onedrive/1.0',
-               'Authorization': 'Bearer {0}'.format(token),
-               'Accept': 'application/json'}
+               'Authorization': token,
+               'Accept': 'application/json',
+               "Content-Type": "application/x-www-form-urlencoded"}
 
     # Use these headers to instrument calls. Makes it easier
     # to correlate requests and responses in case of problems

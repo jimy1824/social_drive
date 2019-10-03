@@ -10,7 +10,9 @@ from rest_framework.status import HTTP_200_OK
 from drives_data.serializers import UserSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework_jwt.settings import api_settings
-from .models import User
+
+from google_drive.serializers import DrivesDataSerializer
+from .models import User, DrivesData
 
 
 class HomeView(LoginRequiredMixin, View):
@@ -57,6 +59,14 @@ class RegistrationView(APIView):
         return Response((self.create_user_objects(request)), status=HTTP_200_OK)
 
 
+class UsersLoggedInView(APIView):
+    permission_class = IsAuthenticated
+    serializer_class = UserSerializer
+
+    def get(self, request, *args, **kwargs):
+        return Response(self.serializer_class(self.request.user).data, status=HTTP_200_OK)
+
+
 class UsersListView(APIView):
     permission_class = IsAuthenticated
     serializer_class = UserSerializer
@@ -82,3 +92,18 @@ class UserAvailibilityView(APIView):
 
     def post(self, request, *args, **kwargs):
         return Response(self.get_check_availibility(request), status=HTTP_200_OK)
+
+
+class DriveDataView(APIView):
+    serializers_class = DrivesDataSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_objects(self, drive_type, request):
+        query_dict = {'drive_type': drive_type, 'user': request.user}
+
+        return DrivesData.objects.filter(**query_dict)
+
+    def get(self, request, *args, **kwargs):
+        drive_type = kwargs.get('drive_type')
+        return Response(
+            self.serializers_class(self.get_objects(drive_type, request),many=True).data,status=HTTP_200_OK)
