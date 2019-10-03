@@ -5,9 +5,11 @@ import time
 # Client ID and secret
 from django.conf import settings
 
-client_id = settings.ONEDRIVE_CLIENT_ID
-client_secret = settings.ONEDRIVE_SECRET_ID
-
+# client_id = settings.ONEDRIVE_CLIENT_ID
+client_id = '278bf077-cf1c-41d1-a94b-5708ba13c1f2'
+# client_secret = settings.ONEDRIVE_SECRET_ID
+client_secret = '@Q-fMGriYtx?-xeUsEu6BgMmcEwJi102'
+#
 # client_id = '7d5dabd8-7a75-4425-8bae-b98be62f2e0b'
 # client_secret = 'Ptn9Q=cI6xTlBPH=0SQer]ORIblzuH=1'
 
@@ -61,6 +63,7 @@ def get_token_from_code(auth_code, redirect_uri):
     post_data = {'grant_type': 'authorization_code',
                  'code': auth_code,
                  'redirect_uri': redirect_uri,
+                 # 'resource': 'https://graph.microsoft.com/',
                  'scope': ' '.join(str(i) for i in scopes),
                  'client_id': client_id,
                  'client_secret': client_secret

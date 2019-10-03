@@ -37,6 +37,8 @@ def get_file_of_specific_folder(user, data_list, dbx, folder_path):
 
 
 def GoogleDrive_syscronization(user):
+    print('Google drive sync')
+    # import pdb; pdb.set_trace()
     creds = None
     if user.google_credential_file:
         with open(user.google_credential_file.path, 'rb') as token:
@@ -53,6 +55,7 @@ def GoogleDrive_syscronization(user):
         instance = DrivesData(user=user, drive_type=DrivesData.GOOGLEDRIVE, file_type=DrivesData.FILE,
                               file_id=file.get('id'), file_name=file.get('name'))
         instance.save()
+    print('Google drive sync')
 
 
 def Box_syscronization(user):

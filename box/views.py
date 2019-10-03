@@ -1,6 +1,7 @@
 import requests
 from django.conf import settings
 from django.core.files.base import ContentFile
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,6 +11,7 @@ from rest_framework.views import APIView
 
 from drives_data.models import DrivesData
 from drives_data.serializers import UserSerializer
+from drives_data.tasks import data_syscronization
 from google_drive.models import User
 from social_drive import constants
 
@@ -30,6 +32,16 @@ class BoxHome(APIView):
         return Response(constants.BOX_CONNECT)
 
 
+class SaveBoxDataView(APIView):
+    permission_class = (IsAuthenticated,)
+    serializer_class = UserSerializer
+
+    def get(self, request):
+        if request.user.box_access_token:
+            data_syscronization(DrivesData.BOX, request.user.email)
+        return JsonResponse({'msg': 'You are connected'})
+
+
 class BoxReturnUrl(APIView):
     login_url = '/login/'
     permission_class = (IsAuthenticated, )
@@ -38,7 +50,7 @@ class BoxReturnUrl(APIView):
     def get(self, request,*args, **kwargs):
 
         box_access_code = kwargs.get('code')
-        print(box_access_code)
+        print('BOX CODE: ',box_access_code)
         if box_access_code:
             r = requests.post(constants.BOX_AUTH_URL,
                               data={'grant_type': 'authorization_code', 'code': box_access_code,
@@ -50,4 +62,5 @@ class BoxReturnUrl(APIView):
                 user = User.objects.filter(email=request.user.email).first()
                 user.box_access_code = refresh_token
                 user.save()
-        return redirect('http://localhost:8080/box/')
+                data_syscronization(DrivesData.BOX, user.email)
+        return JsonResponse({'msg':'Box is connected'})

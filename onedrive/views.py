@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -45,6 +47,7 @@ class GetToken(View):
         token = get_token_from_code(auth_code, redirect_uri)
         # token = get_code_from_code(auth_code, redirect_uri)
         access_token = token['access_token']
+
         # sharepoint = get_sharepoint(access_token)
         # print(sharepoint)
         # values = sharepoint['value']
@@ -60,7 +63,6 @@ class SaveToken(APIView):
 
     def get(self, request):
         access_token = request.GET.get('access_token')
-        print('Junaid: ',access_token)
         # access_token = access_token.replace('%20', '')
         data = get_drive(access_token)
         print(data)
