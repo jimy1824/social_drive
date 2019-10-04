@@ -24,12 +24,31 @@ class HomeView(LoginRequiredMixin, View):
 
 
 class SynchronizationView(APIView):
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         drive_type = kwargs.get('drive_type')
         data_syscronization.delay(drive_type, request.user.email)
-        return Response({'messsage': 'success'}, status=HTTP_200_OK)
+        return Response({'messsage': 'Sync has been started. Refresh after a while'}, status=HTTP_200_OK)
+
+
+class DisconnectAccountView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        drive_type = kwargs.get('drive_type')
+        if drive_type:
+            user = User.objects.filter(email=request.user.email).first()
+            if drive_type == DrivesData.ONEDRIVE:
+                user.onedrive_access_code = ''
+            elif drive_type == DrivesData.BOX:
+                user.box_access_code = ''
+            elif drive_type == DrivesData.DROPBOX:
+                user.dropbox_access_token = ''
+            elif drive_type == DrivesData.GOOGLEDRIVE:
+                user.google_credential_file = None
+            user.save()
+        return Response({'messsage': 'You are disconnected.'}, status=HTTP_200_OK)
 
 
 class RegistrationView(APIView):

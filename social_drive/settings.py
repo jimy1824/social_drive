@@ -162,8 +162,9 @@ LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'login'
 
 JWT_AUTH = {
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=100),
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
+    'JWT_ALLOW_REFRESH': True,
 }
 BOX_CLIENT_ID = config('BOX_CLIENT_ID')
 BOX_CLIENT_SECRET_ID = config('BOX_CLIENT_SECRET_ID')
