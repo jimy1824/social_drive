@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 
 from drives_data.models import DrivesData
 from drives_data.serializers import UserSerializer
+from drives_data.tasks import data_syscronization
 from google_drive.models import User
 from onedrive.auth_helper import get_token_from_code, get_signin_url, get_code_from_code
 from onedrive.ondrive_service import get_sharepoint, get_drive
@@ -54,7 +55,7 @@ class GetToken(View):
         # for i in range(len(values)):
         #     print(values[i]['list'])
         #     print(values[i]['webUrl'])
-        return redirect('http://localhost:8080/onedrive/?access_token='+access_token)
+        return redirect('http://localhost:8080/?access_token='+access_token)
 
 
 class SaveToken(APIView):
@@ -66,10 +67,11 @@ class SaveToken(APIView):
         # access_token = access_token.replace('%20', '')
         data = get_drive(access_token)
         print(data)
-        sharepoint = get_sharepoint(access_token)
-        print(sharepoint)
+        # sharepoint = get_sharepoint(access_token)
+        # print(sharepoint)
         if access_token:
             user = User.objects.filter(email=request.user.email).first()
             user.onedrive_access_code = access_token
             user.save()
+            data_syscronization(DrivesData.ONEDRIVE, user.email)
         return redirect('http://localhost:8080/onedrive/')

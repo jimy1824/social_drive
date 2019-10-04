@@ -5,7 +5,7 @@ from social_drive.celery import app
 from google_drive.models import User
 from .models import DrivesData
 import dropbox
-
+from google.cloud import storage
 import pickle
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
@@ -17,9 +17,9 @@ def Dropbox_syscronization(user, access_token):
     data_list = []
     dbx = dropbox.Dropbox(access_token)
     get_file_of_specific_folder(user, data_list, dbx, '')
+    print(data_list)
     for data_dict in data_list:
-        instance = DrivesData(**data_dict)
-        instance.save()
+        DrivesData.objects.update_or_create(**data_dict)
 
 
 def get_file_of_specific_folder(user, data_list, dbx, folder_path):
@@ -37,7 +37,6 @@ def get_file_of_specific_folder(user, data_list, dbx, folder_path):
 
 
 def GoogleDrive_syscronization(user):
-    print('Google drive sync')
     # import pdb; pdb.set_trace()
     creds = None
     if user.google_credential_file:
@@ -51,11 +50,13 @@ def GoogleDrive_syscronization(user):
     results = service.files().list(
         pageSize=25, fields="nextPageToken, files(id, name)").execute()
     data_list = results.get('files', [])
+
+    # storage_client = storage.Client()
+    # bucket_list = storage_client.list_buckets()
+    # print(bucket_list)
     for file in data_list:
-        instance = DrivesData(user=user, drive_type=DrivesData.GOOGLEDRIVE, file_type=DrivesData.FILE,
+        DrivesData.objects.update_or_create(user=user, drive_type=DrivesData.GOOGLEDRIVE, file_type=DrivesData.FILE,
                               file_id=file.get('id'), file_name=file.get('name'))
-        instance.save()
-    print('Google drive sync')
 
 
 def Box_syscronization(user):
@@ -78,9 +79,8 @@ def Box_syscronization(user):
                 file_type = DrivesData.DIRECTORY
             else:
                 file_type = DrivesData.FILE
-            instance = DrivesData(user=user, drive_type=DrivesData.BOX, file_type=file_type,
+            DrivesData.objects.update_or_create(user=user, drive_type=DrivesData.BOX, file_type=file_type,
                                   file_id=file.get('id'), file_name=file.get('name'))
-            instance.save()
 
 
 def OneDrive_syscronization(user, onedrive_access_code):
@@ -91,9 +91,8 @@ def OneDrive_syscronization(user, onedrive_access_code):
             file_type = DrivesData.DIRECTORY
         if file.get('file'):
             file_type = DrivesData.FILE
-        instance = DrivesData(user=user, drive_type=DrivesData.ONEDRIVE, file_type=file_type, file_id=file.get('id'),
+        DrivesData.objects.update_or_create(user=user, drive_type=DrivesData.ONEDRIVE, file_type=file_type, file_id=file.get('id'),
                               file_name=file.get('name'))
-        instance.save()
 
 
 @app.task

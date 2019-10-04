@@ -6,7 +6,8 @@ from drives_data import views
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('home/', views.HomeView.as_view(), name='home'),
-    path('syncronization/<str:drive_type>', views.SynchronizationView.as_view(), name='syncronization'),
+    path('syncronization/<str:drive_type>/', views.SynchronizationView.as_view(), name='syncronization'),
+    path('disconnect/<str:drive_type>/', views.DisconnectAccountView.as_view(), name='disconnect'),
     path('login/', obtain_jwt_token),
     path('logged_in_user/', views.UsersLoggedInView.as_view(), name='logged_in_user'),
     path('refresh-token', refresh_jwt_token),
@@ -16,4 +17,5 @@ urlpatterns = [
     path('user-list/', views.UsersListView.as_view()),
     path('user-availibility/', views.UserAvailibilityView.as_view()),
     path('drive_data/<str:drive_type>/', views.DriveDataView.as_view(), name='drive_data'),
+
 ]

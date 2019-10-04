@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from google.cloud import storage
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -49,6 +50,9 @@ class SaveDropboxDataView(APIView):
 
     def get(self, request):
         if request.user.dropbox_access_token:
+            # storage_client = storage.Client()
+            # bucket_list = storage_client.list_buckets()
+            # print(bucket_list)
             data_syscronization(DrivesData.DROPBOX, request.user.email)
         return JsonResponse({'msg': 'You are connected'})
 
