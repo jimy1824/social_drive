@@ -124,5 +124,4 @@ class DriveDataView(APIView):
 
     def get(self, request, *args, **kwargs):
         drive_type = kwargs.get('drive_type')
-        return Response(
-            self.serializers_class(self.get_objects(drive_type, request),many=True).data,status=HTTP_200_OK)
+        return Response(self.serializers_class(self.get_objects(drive_type, request),many=True).data,status=HTTP_200_OK)

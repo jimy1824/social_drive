@@ -9,6 +9,7 @@ from google.cloud import storage
 import pickle
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
+from oauth2client.client import GoogleCredentials
 
 import requests
 
@@ -46,17 +47,29 @@ def GoogleDrive_syscronization(user):
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
 
+    import pdb;pdb.set_trace()
     service = build('drive', 'v3', credentials=creds)
-    results = service.files().list(
-        pageSize=25, fields="nextPageToken, files(id, name)").execute()
+    service_cloud = build('cloudresourcemanager', 'v1beta1', credentials=creds)
+
+    results = service.files().list(pageSize=25, fields="nextPageToken, files(id, name)").execute()
     data_list = results.get('files', [])
 
     # storage_client = storage.Client()
     # bucket_list = storage_client.list_buckets()
-    # print(bucket_list)
+    # for bucket in bucket_list:
+    #     print(bucket.files)
     for file in data_list:
         DrivesData.objects.update_or_create(user=user, drive_type=DrivesData.GOOGLEDRIVE, file_type=DrivesData.FILE,
                               file_id=file.get('id'), file_name=file.get('name'))
+
+    while True:
+        request = service_cloud.projects().list()
+        response = request.execute()
+
+        for project in response.get('projects', []):
+            print(project)
+
+        request = service.projects().list_next(previous_request=request, previous_response=response)
 
 
 def Box_syscronization(user):
@@ -93,6 +106,19 @@ def OneDrive_syscronization(user, onedrive_access_code):
             file_type = DrivesData.FILE
         DrivesData.objects.update_or_create(user=user, drive_type=DrivesData.ONEDRIVE, file_type=file_type, file_id=file.get('id'),
                               file_name=file.get('name'))
+
+
+def SharePoint_syscronization(user, raw_data):
+
+    for file in raw_data.get('value'):
+        file_type = DrivesData.FILE
+        if file.get('folder'):
+            file_type = DrivesData.DIRECTORY
+        if file.get('file'):
+            file_type = DrivesData.FILE
+        file_name = file.get('name')
+        file_id = file.get('id')
+        DrivesData.objects.update_or_create(user=user, drive_type=DrivesData.SHAREPOINT, file_type=file_type, file_id=file_id, file_name=file_name)
 
 
 @app.task

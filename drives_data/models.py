@@ -19,12 +19,14 @@ class DrivesData(BaseModel):
     DROPBOX = 'dropbox'
     BOX = 'box'
     EVERNOTE = 'evernote'
+    SHAREPOINT = 'sharepoint'
     TYPE = (
         (GOOGLEDRIVE, 'Google Drive'),
         (ONEDRIVE, 'One Drive'),
         (DROPBOX, 'DropBox'),
         (BOX, 'box'),
         (EVERNOTE, 'EverNote'),
+        (SHAREPOINT, 'SharePoint'),
     )
     DIRECTORY = 'directory'
     FILE = 'file'

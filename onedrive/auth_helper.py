@@ -7,9 +7,9 @@ from django.conf import settings
 
 # client_id = settings.ONEDRIVE_CLIENT_ID
 client_id = '278bf077-cf1c-41d1-a94b-5708ba13c1f2'
-# client_secret = settings.ONEDRIVE_SECRET_ID
 client_secret = '@Q-fMGriYtx?-xeUsEu6BgMmcEwJi102'
-#
+# client_secret = settings.ONEDRIVE_SECRET_ID
+# tenant_id = 'f2a16c42-4f5f-4fc3-928f-3e1a7721a35d'
 # client_id = '7d5dabd8-7a75-4425-8bae-b98be62f2e0b'
 # client_secret = 'Ptn9Q=cI6xTlBPH=0SQer]ORIblzuH=1'
 
@@ -21,9 +21,11 @@ authority = 'https://login.microsoftonline.com'
 
 
 # The authorize URL that initiates the OAuth2 client credential flow for admin consent
+# authorize_url = '{0}{1}'.format(authority, '/nomadz.onmicrosoft.com/oauth2/v2.0/authorize?{0}')
 authorize_url = '{0}{1}'.format(authority, '/common/oauth2/v2.0/authorize?{0}')
 
 # The token issuing endpoint
+# token_url = '{0}{1}'.format(authority, '/nomadz.onmicrosoft.com/oauth2/v2.0/token')
 token_url = '{0}{1}'.format(authority, '/common/oauth2/v2.0/token')
 
 # The scopes required by the app
@@ -63,7 +65,6 @@ def get_token_from_code(auth_code, redirect_uri):
     post_data = {'grant_type': 'authorization_code',
                  'code': auth_code,
                  'redirect_uri': redirect_uri,
-                 # 'resource': 'https://graph.microsoft.com/',
                  'scope': ' '.join(str(i) for i in scopes),
                  'client_id': client_id,
                  'client_secret': client_secret
