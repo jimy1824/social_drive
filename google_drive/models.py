@@ -10,6 +10,7 @@ class User(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     subscription = models.BooleanField(default=False)
+    currently_active = models.BooleanField(default=False)
     google_credential_file = models.FileField(upload_to='GoogleDriveCredentials/', blank=True, null=True)
     dropbox_access_token = models.TextField(blank=True, null=True)
     box_access_code = models.TextField(blank=True, null=True)
